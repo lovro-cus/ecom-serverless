@@ -1,0 +1,137 @@
+service: ecom-serverless
+
+plugins:
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  stage: local
+  region: us-east-1
+  environment:
+    JWT_SECRET: local-dev-secret-key
+
+functions:
+  # --- AUTH ---
+  register:
+    handler: src/functions/auth/register.handler
+    events:
+      - http:
+          path: auth/register
+          method: post
+          cors: true
+
+  login:
+    handler: src/functions/auth/login.handler
+    events:
+      - http:
+          path: auth/login
+          method: post
+          cors: true
+
+  # --- PRODUCTS ---
+  products:
+    handler: src/functions/products/index.handler
+    events:
+      - http:
+          path: products
+          method: get
+          cors: true
+      - http:
+          path: products
+          method: post
+          cors: true
+      - http:
+          path: products
+          method: put
+          cors: true
+      - http:
+          path: products
+          method: delete
+          cors: true
+
+  # --- ORDERS ---
+  orders:
+    handler: src/functions/orders/index.handler
+    events:
+      - http:
+          path: orders
+          method: get
+          cors: true
+      - http:
+          path: orders
+          method: post
+          cors: true
+      - http:
+          path: orders
+          method: patch
+          cors: true
+
+  # --- CART ---
+  cart:
+    handler: src/functions/cart/index.handler
+    events:
+      - http:
+          path: cart
+          method: get
+          cors: true
+      - http:
+          path: cart
+          method: post
+          cors: true
+      - http:
+          path: cart
+          method: patch
+          cors: true
+      - http:
+          path: cart
+          method: delete
+          cors: true
+
+  # --- USER PROFILE ---
+  userProfile:
+    handler: src/functions/user-profile/index.handler
+    events:
+      - http:
+          path: user-profile
+          method: get
+          cors: true
+      - http:
+          path: user-profile
+          method: put
+          cors: true
+
+  # --- EVENTI ---
+
+  # EVENT 1: DB sprememba - ob novem narocilu
+  onOrderCreated:
+    handler: src/functions/events/onOrderCreated.handler
+    events:
+      - http:
+          path: events/order-created
+          method: post
+
+  # EVENT 2: User event - ob registraciji
+  onUserRegistered:
+    handler: src/functions/events/onUserRegistered.handler
+    events:
+      - http:
+          path: events/user-registered
+          method: post
+
+  # EVENT 3: Logi/monitoring - nizka zaloga
+  onLowStock:
+    handler: src/functions/events/onLowStock.handler
+    events:
+      - http:
+          path: events/low-stock
+          method: post
+
+  # EVENT 4: Cron - dnevno porocilo
+  dailyReport:
+    handler: src/functions/events/dailyReport.handler
+    events:
+      - schedule: rate(1 day)
+      - http:
+          path: events/daily-report
+          method: post

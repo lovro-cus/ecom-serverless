@@ -1,0 +1,18 @@
+{
+  "name": "ecom-serverless",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "serverless offline --stage local"
+  },
+  "main": "index.js",
+  "devDependencies": {
+    "serverless": "^4.36.1",
+    "serverless-offline": "^14.7.0"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "better-sqlite3": "^12.10.0",
+    "jsonwebtoken": "^9.0.3",
+    "uuid": "^14.0.0"
+  }
+}
