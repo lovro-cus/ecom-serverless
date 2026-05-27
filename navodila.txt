@@ -1,0 +1,86 @@
+Navodila:
+Brezstrežniški zaledni sistem ali “serverless” je ideja, da lahko imamo strežniško aplikacijo, pri kateri ne rabimo skrbeti za upravljanje strežnika. Brezstrežniško računalništvo ne pomeni, da za gostovanje in izvajanje kode ne uporabljamo strežnikov.
+ 
+IDEJA:
+
+    Uporabnikom brezstrežniških zalednih sistemov ni potrebno nameniti časa in sredstev za pripravo strežnikov, vzdrževanje, posodobitve, razširjanje, načrtovanje zmogljivosti.
+    Razvijalci se naj osredotočajo na pisanje poslovne logike svoje aplikacije.
+
+Zahteve brezstrežniškega računalništva:
+1. Ne skrbimo za upravljanje strežnikov ali procesov
+2. Samodejno prilagajanje obsega in samodejno zagotavljanje na podlagi posojila
+3. Stroški glede na uporabo
+4. Zmogljivosti, ki niso definirane na podlagi velikosti in števila
+5. Implicitno visoka razpoložljivost
+ 
+Sestavni deli brezstrežniških zalednih sistemov:
+
+    Functions As A Service – FAAS
+    Backend/Databse As A Service – BAAS
+    Shramba – Storage
+    Pošiljanje sporočil – Messaging
+    Varnost - Security
+    …
+
+Zamislite si informacijski sistem pri katerem bi bilo smiselno uporabiti brezstrežniško arhitekturo. Za implementacijo boste uporabili poljubno brestrežniško tehnologijo/ponudnika (Serverless Framework, Firebase, Supabase,...). Osredotočili se bomo na FaaS. 
+
+🚨Načrtujte vsaj 5 glavnih funkcionalnosti, ki jih boste podprli z več funkcijami.🚨
+
+Za nov projekt ustvarite nov javen git repozitorij‼️
+
+Functions as a Service (FaaS) je ključna komponenta brezstrežniškega računalništva, ki omogoča izvajanje funkcij kot odziv na specifične dogodke (evente). Namesto da bi aplikacija neprestano tekla in čakala na dogodke, FaaS omogoča sprotno nalaganje in izvajanje funkcij, ko se pojavijo določeni sprožilci.
+
+Dogodki (angl.: eventi) so sprožilci, ki aktivirajo funkcije v FaaS. Ti dogodki lahko prihajajo iz različnih virov, kot so HTTP zahteve, spremembe v podatkovnih bazah, nalaganje datotek v shrambo, sporočila iz vrst sporočil, urniki ali drugi zunanji sistemi. Glavne prednosti uporabe eventov v FaaS vključujejo:
+
+    Samodejno prilagajanje: Funkcije se avtomatsko prilagajajo glede na število dogodkov, ki jih sprožijo, kar omogoča učinkovito obvladovanje velikih obremenitev brez ročnega skaliranja.
+    Plačilo glede na uporabo: Stroški so povezani s številom izvedenih funkcij, kar pomeni, da plačamo le za resnično porabo.
+    Poenostavljeno upravljanje: Razvijalci se lahko osredotočajo na pisanje poslovne logike brez skrbi za infrastrukturo.
+
+Pri delu z dogodki v FaaS je pomembno razumeti različne vrste dogodkov in kako jih uporabiti za učinkovito delovanje brezstrežniških aplikacij.
+
+Brestrežniški sistem boste zavarovali in dopolnili z dodatnimi funkcijami, ki se odzivajo na dogodke.
+
+ 
+Navodilo naloge:
+
+🚨Načrtujte vsaj 5 glavnih funkcionalnosti, ki jih boste podprli z več funkcijami.🚨
+
+    Avtentikacija:
+        Zagotovite avtentikacijo in zavarujte funkcije. 
+
+    Različni dogodki (uporabite vsaj 4 različne iz seznama spodaj):
+
+        Podatkovne spremembe:
+            Spremembe v podatkovnih bazah (vstavljanje, posodabljanje, brisanje podatkov) lahko sprožijo funkcije. To vključuje podporo za relacijske in NoSQL podatkovne baze.
+
+        Shramba in datoteke:
+            Operacije z datotekami, kot so nalaganje, brisanje ali posodabljanje datotek v shranjevalnih storitvah, lahko sprožijo funkcije.
+
+        Sporočila in obveščanje:
+            Prejem sporočil iz sistemov za upravljanje vrst sporočil (message queues) ali storitev za obveščanje lahko sproži funkcije. To vključuje sisteme kot so RabbitMQ, Kafka, Amazon SQS, Google Pub/Sub itd.
+
+        Časovni dogodki:
+            Urniki in časovni sprožilci (cron jobs) omogočajo sprožanje funkcij na določen časovni interval ali ob specifičnih časovnih točkah.
+
+        Logi in nadzorni dogodki:
+            Analiza dnevniških zapisov ali nadzornih dogodkov iz sistemov za spremljanje in logiranje lahko sproži funkcije za nadaljnjo obdelavo ali alarmiranje.
+
+        Uporabniški dogodki:
+            Dejavnosti uporabnikov, kot so prijave, registracije, transakcije in druge interakcije v aplikacijah, lahko sprožijo funkcije za obdelavo teh dogodkov.
+
+        IoT dogodki:
+            Podatki in dogodki iz naprav Internet of Things (IoT) lahko sprožijo funkcije za obdelavo podatkov v realnem času ali odzivanje na dogodke.
+
+        Integracijski dogodki:
+            Dogodki, ki izhajajo iz integracij z drugimi storitvami ali aplikacijami (npr. spremembe v storitvah tretjih oseb), lahko sprožijo funkcije.
+
+        DevOps in CI/CD dogodki:
+            Dogodki, povezani z razvojnimi in operativnimi procesi, kot so spremembe v repozitorijih kode, gradnje CI/CD cevovodov ali konfiguracijske spremembe, lahko sprožijo funkcije za avtomatizacijo procesov.
+
+    Uvedba in testiranje:
+        Uvedba funkcij in zagon (npr.: serverless offline --stage local).
+        Testiranje vseh funkcij (postman).
+
+Pomoč:
+primer naloge -> https://github.com/HlisTilen/ITA
+Primer za Serverless Framework: events-FaaS -> https://github.com/HlisTilen/event-management-system-faas
