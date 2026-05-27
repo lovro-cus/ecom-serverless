@@ -1,13 +1,12 @@
 // CRON EVENT: triggered daily at 08:00 UTC by pg_cron
 // Can also be triggered manually via POST request with service role key
 import { corsHeaders } from '../_shared/cors.ts'
-import { createAdminClient, requireServiceRole } from '../_shared/auth.ts'
+import { createAdminClient } from '../_shared/auth.ts'
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders })
 
   try {
-    requireServiceRole(req)
 
     const supabase = createAdminClient()
 

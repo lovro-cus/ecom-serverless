@@ -282,18 +282,18 @@
       "name": "6. EVENTI",
       "item": [
         {
-          "name": "EVENT: Storage - simulacija uploada slike",
+          "name": "EVENT: Log - nizka zaloga (posodobi stock na 3)",
           "request": {
-            "method": "POST",
+            "method": "PUT",
             "header": [
               { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{service_role_key}}" }
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"bucket_id\": \"product-images\",\n  \"name\": \"{{product_id}}.jpg\",\n  \"owner\": \"test\"\n}"
+              "raw": "{\n  \"stock\": 3\n}"
             },
-            "url": "{{base_url}}/functions/v1/on-file-upload"
+            "url": "{{base_url}}/functions/v1/products?id={{product_id}}"
           }
         },
         {
