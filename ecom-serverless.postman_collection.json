@@ -6,6 +6,7 @@
   "variable": [
     { "key": "base_url", "value": "https://oqrrplrmyjvwuvywvrao.supabase.co" },
     { "key": "anon_key", "value": "PRILEPI_ANON_KEY_TUKAJ" },
+    { "key": "service_role_key", "value": "PRILEPI_SERVICE_ROLE_KEY_TUKAJ" },
     { "key": "access_token", "value": "" },
     { "key": "product_id", "value": "" },
     { "key": "cart_item_id", "value": "" },
@@ -16,7 +17,7 @@
       "name": "1. Auth",
       "item": [
         {
-          "name": "Registracija",
+          "name": "Registracija (User event trigger!)",
           "request": {
             "method": "POST",
             "header": [
@@ -25,7 +26,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"geslo1234\"\n}"
+              "raw": "{\n  \"email\": \"TVOJ_EMAIL\",\n  \"password\": \"geslo1234\"\n}"
             },
             "url": "{{base_url}}/auth/v1/signup"
           }
@@ -54,7 +55,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"geslo1234\"\n}"
+              "raw": "{\n  \"email\": \"TVOJ_EMAIL\",\n  \"password\": \"geslo1234\"\n}"
             },
             "url": "{{base_url}}/auth/v1/token?grant_type=password"
           }
@@ -85,7 +86,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Modra majica\",\n  \"description\": \"Udobna bombažna majica\",\n  \"price\": 19.99,\n  \"stock\": 50\n}"
+              "raw": "{\n  \"name\": \"Modra majica\",\n  \"description\": \"Udobna bombazna majica\",\n  \"price\": 19.99,\n  \"stock\": 50\n}"
             },
             "url": "{{base_url}}/functions/v1/products"
           }
@@ -114,7 +115,7 @@
           }
         },
         {
-          "name": "Izbriši produkt",
+          "name": "Izbrisi produkt",
           "request": {
             "method": "DELETE",
             "header": [
@@ -126,10 +127,10 @@
       ]
     },
     {
-      "name": "3. Košarica",
+      "name": "3. Kosarica",
       "item": [
         {
-          "name": "Dodaj v košarico",
+          "name": "Dodaj v kosarico",
           "event": [
             {
               "listen": "test",
@@ -155,7 +156,7 @@
           }
         },
         {
-          "name": "Prikaži košarico",
+          "name": "Prikazi kosarico",
           "request": {
             "method": "GET",
             "header": [
@@ -165,7 +166,7 @@
           }
         },
         {
-          "name": "Posodobi količino",
+          "name": "Posodobi kolicino",
           "request": {
             "method": "PATCH",
             "header": [
@@ -180,7 +181,7 @@
           }
         },
         {
-          "name": "Odstrani iz košarice",
+          "name": "Odstrani iz kosarice",
           "request": {
             "method": "DELETE",
             "header": [
@@ -192,10 +193,10 @@
       ]
     },
     {
-      "name": "4. Naročila",
+      "name": "4. Narocila",
       "item": [
         {
-          "name": "Ustvari naročilo (DB trigger!)",
+          "name": "Ustvari narocilo (DB trigger!)",
           "event": [
             {
               "listen": "test",
@@ -221,7 +222,7 @@
           }
         },
         {
-          "name": "Moja naročila",
+          "name": "Moja narocila",
           "request": {
             "method": "GET",
             "header": [
@@ -231,7 +232,7 @@
           }
         },
         {
-          "name": "Posodobi status naročila",
+          "name": "Posodobi status narocila",
           "request": {
             "method": "PATCH",
             "header": [
@@ -251,7 +252,7 @@
       "name": "5. Profil",
       "item": [
         {
-          "name": "Prikaži profil",
+          "name": "Prikazi profil",
           "request": {
             "method": "GET",
             "header": [
@@ -278,15 +279,59 @@
       ]
     },
     {
-      "name": "6. Porocilo (Cron event)",
+      "name": "6. EVENTI",
       "item": [
         {
-          "name": "Generiraj dnevno porocilo",
+          "name": "EVENT: Storage - simulacija uploada slike",
           "request": {
             "method": "POST",
             "header": [
               { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{anon_key}}" }
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bucket_id\": \"product-images\",\n  \"name\": \"{{product_id}}.jpg\",\n  \"owner\": \"test\"\n}"
+            },
+            "url": "{{base_url}}/functions/v1/on-file-upload"
+          }
+        },
+        {
+          "name": "EVENT: DB sprememba - simulacija novega narocila",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"{{order_id}}\",\n  \"status\": \"pending\"\n}"
+            },
+            "url": "{{base_url}}/functions/v1/on-order-created"
+          }
+        },
+        {
+          "name": "EVENT: User - simulacija registracije",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"record\": {\n    \"id\": \"00000000-0000-0000-0000-000000000001\",\n    \"email\": \"test@test.com\",\n    \"raw_user_meta_data\": { \"full_name\": \"Test User\" }\n  }\n}"
+            },
+            "url": "{{base_url}}/functions/v1/on-user-registered"
+          }
+        },
+        {
+          "name": "EVENT: Cron - generiraj dnevno porocilo",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
             ],
             "body": {
               "mode": "raw",
