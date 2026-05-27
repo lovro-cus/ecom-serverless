@@ -1,0 +1,301 @@
+{
+  "info": {
+    "name": "E-Commerce Serverless",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "https://oqrrplrmyjvwuvywvrao.supabase.co" },
+    { "key": "anon_key", "value": "PRILEPI_ANON_KEY_TUKAJ" },
+    { "key": "access_token", "value": "" },
+    { "key": "product_id", "value": "" },
+    { "key": "cart_item_id", "value": "" },
+    { "key": "order_id", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "1. Auth",
+      "item": [
+        {
+          "name": "Registracija",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "apikey", "value": "{{anon_key}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"geslo1234\"\n}"
+            },
+            "url": "{{base_url}}/auth/v1/signup"
+          }
+        },
+        {
+          "name": "Prijava (dobiti access_token)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.access_token) {",
+                  "  pm.collectionVariables.set('access_token', json.access_token);",
+                  "  console.log('Token shranjen!');",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "apikey", "value": "{{anon_key}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"geslo1234\"\n}"
+            },
+            "url": "{{base_url}}/auth/v1/token?grant_type=password"
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Produkti",
+      "item": [
+        {
+          "name": "Ustvari produkt",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.id) pm.collectionVariables.set('product_id', json.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Modra majica\",\n  \"description\": \"Udobna bombažna majica\",\n  \"price\": 19.99,\n  \"stock\": 50\n}"
+            },
+            "url": "{{base_url}}/functions/v1/products"
+          }
+        },
+        {
+          "name": "Seznam produktov",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/functions/v1/products"
+          }
+        },
+        {
+          "name": "Posodobi produkt",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"price\": 24.99,\n  \"stock\": 45\n}"
+            },
+            "url": "{{base_url}}/functions/v1/products?id={{product_id}}"
+          }
+        },
+        {
+          "name": "Izbriši produkt",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": "{{base_url}}/functions/v1/products?id={{product_id}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Košarica",
+      "item": [
+        {
+          "name": "Dodaj v košarico",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.id) pm.collectionVariables.set('cart_item_id', json.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"product_id\": \"{{product_id}}\",\n  \"quantity\": 2\n}"
+            },
+            "url": "{{base_url}}/functions/v1/cart"
+          }
+        },
+        {
+          "name": "Prikaži košarico",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": "{{base_url}}/functions/v1/cart"
+          }
+        },
+        {
+          "name": "Posodobi količino",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quantity\": 3\n}"
+            },
+            "url": "{{base_url}}/functions/v1/cart?id={{cart_item_id}}"
+          }
+        },
+        {
+          "name": "Odstrani iz košarice",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": "{{base_url}}/functions/v1/cart?id={{cart_item_id}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Naročila",
+      "item": [
+        {
+          "name": "Ustvari naročilo (DB trigger!)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.id) pm.collectionVariables.set('order_id', json.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"items\": [\n    { \"product_id\": \"{{product_id}}\", \"quantity\": 1 }\n  ]\n}"
+            },
+            "url": "{{base_url}}/functions/v1/orders"
+          }
+        },
+        {
+          "name": "Moja naročila",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": "{{base_url}}/functions/v1/orders"
+          }
+        },
+        {
+          "name": "Posodobi status naročila",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"completed\"\n}"
+            },
+            "url": "{{base_url}}/functions/v1/orders?id={{order_id}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Profil",
+      "item": [
+        {
+          "name": "Prikaži profil",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": "{{base_url}}/functions/v1/user-profile"
+          }
+        },
+        {
+          "name": "Posodobi profil",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"Janez Novak\",\n  \"phone\": \"041 123 456\",\n  \"address\": \"Slovenija, Ljubljana\"\n}"
+            },
+            "url": "{{base_url}}/functions/v1/user-profile"
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Porocilo (Cron event)",
+      "item": [
+        {
+          "name": "Generiraj dnevno porocilo",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{anon_key}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": "{{base_url}}/functions/v1/daily-report"
+          }
+        }
+      ]
+    }
+  ]
+}
